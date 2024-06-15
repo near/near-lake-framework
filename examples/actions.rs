@@ -20,7 +20,7 @@ fn main() -> anyhow::Result<()> {
 }
 
 async fn print_function_calls_to_my_account(
-    mut block: near_lake_primitives::block::Block,
+    block: near_lake_primitives::block::Block,
 ) -> anyhow::Result<()> {
     let block_height = block.block_height();
     let actions: Vec<&near_lake_primitives::actions::FunctionCall> = block

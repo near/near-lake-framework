@@ -68,9 +68,9 @@ impl types::Lake {
             // concurrency 1
             let mut handlers = tokio_stream::wrappers::ReceiverStream::new(stream)
                 .map(|streamer_message| async {
-                    let mut block: near_lake_primitives::block::Block = streamer_message.into();
+                    let block: near_lake_primitives::block::Block = streamer_message.into();
 
-                    context.execute_before_run(&mut block);
+                    context.execute_before_run(&block);
 
                     let user_indexer_function_execution_result = f(block, context).await;
 
@@ -116,7 +116,7 @@ impl types::Lake {
         struct EmptyContext {}
 
         impl LakeContextExt for EmptyContext {
-            fn execute_before_run(&self, _block: &mut near_lake_primitives::block::Block) {}
+            fn execute_before_run(&self, _block: &near_lake_primitives::block::Block) {}
 
             fn execute_after_run(&self) {}
         }

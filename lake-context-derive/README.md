@@ -35,7 +35,7 @@ This will simplify your indexer function signature. It now needs only the contex
 
 ```ignore
 async fn handle_block(
-    mut block: Block,
+    block: Block,
     ctx: &MyContext,
 ) -> anyhow::Result<()> {
   // body

@@ -33,7 +33,7 @@ fn main() -> anyhow::Result<()> {
 }
 
 async fn print_function_call_tx_hash(
-    mut block: near_lake_primitives::block::Block,
+    block: near_lake_primitives::block::Block,
     ctx: &ParentTransactionCache,
 ) -> anyhow::Result<()> {
     // Cache has been updated before this function is called.

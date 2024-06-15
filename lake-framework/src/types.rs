@@ -179,7 +179,7 @@ pub enum LakeError {
 /// struct PrinterContext;
 ///
 /// impl LakeContextExt for PrinterContext {
-///    fn execute_before_run(&self, block: &mut near_lake_primitives::block::Block) {
+///    fn execute_before_run(&self, block: &near_lake_primitives::block::Block) {
 ///       println!("Processing block {}", block.header().height());
 ///   }
 ///   fn execute_after_run(&self) {}
@@ -201,7 +201,7 @@ pub enum LakeError {
 /// // We need our context to do nothing before and after the indexing process.
 /// // The only purpose is to provide the database connection pool to the indexing process.
 /// impl LakeContextExt for ApplicationDataContext {
-///   fn execute_before_run(&self, block: &mut near_lake_primitives::block::Block) {}
+///   fn execute_before_run(&self, block: &near_lake_primitives::block::Block) {}
 ///   fn execute_after_run(&self) {}
 /// }
 ///
@@ -319,7 +319,7 @@ pub enum LakeError {
 /// And we didn't need to implement them in our `ApplicationDataContext` struct because `LakeContext` derive macro did it for us automatically.
 pub trait LakeContextExt {
     /// This method will be called before the indexing process is started.
-    fn execute_before_run(&self, block: &mut near_lake_primitives::block::Block);
+    fn execute_before_run(&self, block: &near_lake_primitives::block::Block);
     /// This method will be called after the indexing process is finished.
     fn execute_after_run(&self);
 }

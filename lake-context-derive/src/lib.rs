@@ -65,7 +65,7 @@ pub fn lake_context_derive(input: TokenStream) -> TokenStream {
     let expanded = quote! {
         // The generated impl.
         impl near_lake_framework::LakeContextExt for #name {
-            fn execute_before_run(&self, block: &mut near_lake_primitives::block::Block) {
+            fn execute_before_run(&self, block: &near_lake_primitives::block::Block) {
                 #( #calls_before_run )*
             }
 

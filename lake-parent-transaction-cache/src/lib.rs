@@ -62,7 +62,7 @@ impl LakeContextExt for ParentTransactionCache {
     /// The process to scan the [near_lake_primitives::Block](near_lake_framework::near_lake_primitives::block::Block) and update the cache
     /// with the new transactions and first expected receipts.
     /// The cache is used to find the parent transaction hash for a given receipt id.
-    fn execute_before_run(&self, block: &mut Block) {
+    fn execute_before_run(&self, block: &Block) {
         // Fill up the cache with new transactions and first expected receipts
         // We will try to skip the transactions related to the accounts we're not watching for.
         // Based on `accounts_id`

@@ -24,7 +24,7 @@ LakeBuilder::default()
 # }
 
 async fn handle_block(
-    mut block: Block,
+    block: Block,
     ctx: &ParentTransactionCache,
 ) -> anyhow::Result<()> {
     for action in block.actions() {
