@@ -7,20 +7,20 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-aws-config = { version = "1.4.0", features = ["behavior-version-latest"] }
-aws-types = "1.2.0"
-aws-credential-types = "1.2.0"
-aws-sdk-s3 = "1.24.0"
+aws-config = { version = "1.4", features = ["behavior-version-latest"] }
+aws-types = "1.2"
+aws-credential-types = "1.2"
+aws-sdk-s3 = "1.29"
 async-stream = "0.3.3"
 async-trait = "0.1.64"
 derive_builder = "0.11.2"
 futures = "0.3.23"
 serde = { version = "1", features = ["derive"] }
-serde_json = "1.0.75"
-thiserror = "1.0.38"
+serde_json = "1.0"
+thiserror = "1.0"
 tokio = { version = "1.1", features = ["sync", "time", "rt-multi-thread"] }
 tokio-stream = { version = "0.1" }
-tracing = "0.1.13"
+tracing = "0.1"
 
 near-lake-primitives = { path = "../lake-primitives", version = "0.8.0-beta.2" }
 near-lake-context-derive = { path = "../lake-context-derive", version = "0.8.0-beta.2" }
@@ -29,7 +29,7 @@ near-lake-context-derive = { path = "../lake-context-derive", version = "0.8.0-b
 aws-smithy-http = "0.60.0"
 aws-smithy-types = "1.0.0"
 # use by examples
-anyhow = "1.0.51"
+anyhow = "1.0"
 
 # used by nft_indexer example
 regex = "1.5.4"
