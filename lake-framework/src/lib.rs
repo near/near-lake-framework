@@ -57,39 +57,49 @@ impl types::Lake {
         let runtime = tokio::runtime::Runtime::new()
             .map_err(|err| LakeError::RuntimeStartError { error: err })?;
 
-        runtime.block_on(async move {
-            // capture the concurrency value before it moves into the streamer
-            let concurrency = self.concurrency;
+        runtime.block_on(async move { self.run_with_context_async(f, context).await })
+    }
 
-            // instantiate the NEAR Lake Framework Stream
-            let (sender, stream) = streamer::streamer(self);
+    pub async fn run_with_context_async<'context, C: LakeContextExt, E, Fut>(
+        self,
+        f: impl Fn(near_lake_primitives::block::Block, &'context C) -> Fut,
+        context: &'context C,
+    ) -> Result<(), LakeError>
+    where
+        Fut: Future<Output = Result<(), E>>,
+        E: Into<Box<dyn std::error::Error>>,
+    {
+        // capture the concurrency value before it moves into the streamer
+        let concurrency = self.concurrency;
 
-            // read the stream events and pass them to a handler function with
-            // concurrency 1
-            let mut handlers = tokio_stream::wrappers::ReceiverStream::new(stream)
-                .map(|streamer_message| async {
-                    let mut block: near_lake_primitives::block::Block = streamer_message.into();
+        // instantiate the NEAR Lake Framework Stream
+        let (sender, stream) = streamer::streamer(self);
 
-                    context.execute_before_run(&mut block);
+        // read the stream events and pass them to a handler function with
+        // concurrency 1
+        let mut handlers = tokio_stream::wrappers::ReceiverStream::new(stream)
+            .map(|streamer_message| async {
+                let mut block: near_lake_primitives::block::Block = streamer_message.into();
 
-                    let user_indexer_function_execution_result = f(block, context).await;
+                context.execute_before_run(&mut block);
 
-                    context.execute_after_run();
+                let user_indexer_function_execution_result = f(block, context).await;
 
-                    user_indexer_function_execution_result
-                })
-                .buffer_unordered(concurrency);
+                context.execute_after_run();
 
-            while let Some(_handle_message) = handlers.next().await {}
-            drop(handlers); // close the channel so the sender will stop
+                user_indexer_function_execution_result
+            })
+            .buffer_unordered(concurrency);
 
-            // propagate errors from the sender
-            match sender.await {
-                Ok(Ok(())) => Ok(()),
-                Ok(Err(err)) => Err(err),
-                Err(err) => Err(err.into()), // JoinError
-            }
-        })
+        while let Some(_handle_message) = handlers.next().await {}
+        drop(handlers); // close the channel so the sender will stop
+
+        // propagate errors from the sender
+        match sender.await {
+            Ok(Ok(())) => Ok(()),
+            Ok(Err(err)) => Err(err),
+            Err(err) => Err(err.into()), // JoinError
+        }
     }
 
     /// Creates `mpsc::channel` and returns the `receiver` to read the stream of `StreamerMessage`
